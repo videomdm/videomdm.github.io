@@ -311,6 +311,7 @@ footer {
   .hero-grid { grid-template-columns: 1fr; }
   .stat-cards { grid-template-columns: 1fr; }
   .method-subfigs { grid-template-columns: 1fr; }
+  .comparison-table { display: block; overflow-x: auto; }
   .comparison-table td.prompt-td { display: none; }
   #header h1 { font-size: 1.4rem; }
 }
