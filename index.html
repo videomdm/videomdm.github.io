@@ -36,7 +36,7 @@
     </p>
 
     <div class="btn-row">
-      <a class="btn primary" href="paper.pdf" target="_blank">
+      <a class="btn primary" href="VideoMDM.pdf" target="_blank">
         📄 Paper
       </a>
       <a class="btn" href="#" title="Coming soon">
@@ -244,10 +244,54 @@
       ability to learn motions the teacher has never seen.
     </p>
 
-    <div class="placeholder">
-      Video comparison grid coming soon — samples and baselines to be confirmed.<br>
-      (Survey top-ranked candidates: sample07 deadlifts, sample16 diamond push-ups, sample06 barbell dead rows.)
-    </div>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th class="prompt-th">Exercise</th>
+          <th>WHAM Lift</th>
+          <th>MDM on WHAM</th>
+          <th class="ours-th">VideoMDM (Ours)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="prompt-td">Deadlifts</td>
+          <td>
+            <video data-src="videos/Fit3D/wham_lift/sample07.mp4" autoplay muted loop playsinline></video>
+          </td>
+          <td>
+            <video data-src="videos/Fit3D/fit3d_mdm_on_wham/sample07.mp4" autoplay muted loop playsinline></video>
+          </td>
+          <td>
+            <video data-src="videos/Fit3D/ours/sample07.mp4" autoplay muted loop playsinline></video>
+          </td>
+        </tr>
+        <tr>
+          <td class="prompt-td">Diamond push-ups</td>
+          <td>
+            <video data-src="videos/Fit3D/wham_lift/sample16.mp4" autoplay muted loop playsinline></video>
+          </td>
+          <td>
+            <video data-src="videos/Fit3D/fit3d_mdm_on_wham/sample16.mp4" autoplay muted loop playsinline></video>
+          </td>
+          <td>
+            <video data-src="videos/Fit3D/ours/sample16.mp4" autoplay muted loop playsinline></video>
+          </td>
+        </tr>
+        <tr>
+          <td class="prompt-td">Barbell dead rows</td>
+          <td>
+            <video data-src="videos/Fit3D/wham_lift/sample06.mp4" autoplay muted loop playsinline></video>
+          </td>
+          <td>
+            <video data-src="videos/Fit3D/fit3d_mdm_on_wham/sample06.mp4" autoplay muted loop playsinline></video>
+          </td>
+          <td>
+            <video data-src="videos/Fit3D/ours/sample06.mp4" autoplay muted loop playsinline></video>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
   </div>
 </section>
