@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VideoMDM — 3D Human Motion Generation from 2D Supervision</title>
+  <meta name="description" content="VideoMDM: a diffusion-based framework that trains 3D human motion priors directly from accurate 2D poses extracted from monocular videos, without any 3D ground truth.">
+  <!-- Open Graph -->
+  <meta property="og:title" content="VideoMDM — 3D Human Motion Generation from 2D Supervision">
+  <meta property="og:description" content="A diffusion-based framework that trains 3D human motion priors from monocular video, without any 3D ground truth.">
+  <meta property="og:image" content="figures/method.png">
+  <meta property="og:type" content="website">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════════════════════════ -->
+<header id="header">
+  <div class="container">
+    <h1>VideoMDM: Towards 3D Human Motion Generation<br>From 2D Supervision</h1>
+
+    <p class="authors">
+      <a href="#" title="TODO: add personal page">Amir Mann</a><sup>1</sup>&ensp;
+      <a href="#" title="TODO: add personal page">Gal Harari</a><sup>1</sup>&ensp;
+      <a href="#" title="TODO: add personal page">Merav Keidar</a><sup>1</sup>&ensp;
+      <a href="https://orlitany.github.io/" target="_blank" rel="noopener">Or Litany</a><sup>1,2</sup>
+    </p>
+
+    <p class="affiliations">
+      <sup>1</sup>Technion — Israel Institute of Technology&emsp;
+      <sup>2</sup>NVIDIA
+    </p>
+
+    <div class="btn-row">
+      <a class="btn primary" href="paper.pdf" target="_blank">
+        📄 Paper
+      </a>
+      <a class="btn" href="#" title="Coming soon">
+        arXiv <span class="tag">(coming soon)</span>
+      </a>
+      <a class="btn" href="#" title="To be released">
+        💻 Code <span class="tag">(TBD)</span>
+      </a>
+      <a class="btn" href="supplementary/index.html" target="_blank">
+        🎬 Supplementary
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════ HERO ══════════════════════════════════════ -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-grid">
+
+      <div class="hero-cell">
+        <video autoplay muted loop playsinline>
+          <source src="videos/Fit3D/ours/sample01.mp4" type="video/mp4">
+        </video>
+        <div class="hero-caption">"a person is performing walk the box."</div>
+      </div>
+
+      <div class="hero-cell">
+        <video autoplay muted loop playsinline>
+          <source src="videos/Fit3D/ours/sample19.mp4" type="video/mp4">
+        </video>
+        <div class="hero-caption">"a person is starting mule kicks."</div>
+      </div>
+
+      <div class="hero-cell">
+        <video autoplay muted loop playsinline>
+          <source src="videos/HumanML/ours_mvlift/sample03.mp4" type="video/mp4">
+        </video>
+        <div class="hero-caption">"a person waves with his right hand."</div>
+      </div>
+
+      <div class="hero-cell">
+        <video autoplay muted loop playsinline>
+          <source src="videos/HumanML/ours_mvlift/sample06.mp4" type="video/mp4">
+        </video>
+        <div class="hero-caption">"the person walks backwards in a straight line."</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ABSTRACT ══════════════════════════════════ -->
+<section id="abstract">
+  <div class="container">
+    <h2>Abstract</h2>
+    <p class="abstract-text">
+      We introduce VideoMDM, a diffusion-based framework that trains 3D human motion priors directly
+      from accurate 2D poses extracted from monocular videos, without any 3D ground truth. A pretrained
+      2D-to-3D lifter provides approximate 3D pose sequences that serve as a noisy teacher: these are
+      diffused, denoised by the model in 3D, and supervised in 2D by reprojecting the prediction and
+      comparing against accurate keypoints. We show that, under mild assumptions, a depth-weighted 2D
+      reprojection loss is equivalent in expectation to direct 3D supervision, and we adapt standard 3D
+      motion regularizers — velocity consistency and over-parameterized representation alignment — to this
+      2D setting. Unlike methods that lift 2D to 3D only at inference, VideoMDM learns a coherent 3D
+      motion manifold during training. On HumanML3D it nearly closes the gap to fully 3D-supervised MDM
+      (FID 0.88 vs 0.54); on real video datasets Fit3D and NBA the method learns to generate motions
+      consistently preferred by humans, with strong quantitative results.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════ HIGHLIGHTS ════════════════════════════════ -->
+<section id="highlights">
+  <div class="container">
+    <div class="stat-cards">
+
+      <div class="stat-card">
+        <div class="stat-number">0.88</div>
+        <div class="stat-label">FID on HumanML3D<br>(vs 0.54 with full 3D supervision)</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-number">2×</div>
+        <div class="stat-label">lower MPJPE than WHAM<br>on Fit3D (111 vs 228 mm)</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-number">64%</div>
+        <div class="stat-label">human preference over MAS<br>on NBA dataset</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ METHOD ════════════════════════════════════ -->
+<section id="method">
+  <div class="container">
+    <h2>Method</h2>
+    <p>
+      We are given monocular human-motion videos with accurate 2D joint trajectories
+      but no 3D ground truth. A pretrained 2D-to-3D lifter produces approximate 3D pose sequences
+      that serve as a <em>noisy teacher</em>. As in standard diffusion training, we diffuse these lifted
+      3D estimates and train a denoiser to recover the clean 3D motion — but supervision is applied
+      entirely in 2D by reprojecting the prediction and comparing against the accurate keypoints.
+    </p>
+    <p>
+      A depth-aware weighting of the reprojection loss is, under mild assumptions, provably equivalent
+      in expectation to direct 3D MSE supervision. We further adapt two standard 3D motion regularizers:
+      a depth-weighted 2D velocity loss for temporal coherence, and a representation alignment loss that
+      supervises the over-parameterized motion channels — joint rotations, velocities, and foot contacts —
+      via ray-projection pseudo-targets derived from the predicted motion and the observed 2D keypoints.
+    </p>
+
+    <figure>
+      <img src="figures/method.png" alt="VideoMDM training pipeline">
+      <figcaption>
+        <strong>VideoMDM training.</strong> From monocular video, we extract accurate 2D keypoints and
+        approximate 3D poses. A motion diffusion model is trained to denoise the 3D poses under
+        multi-source supervision: (i) 3D representation alignment, and (ii) 2D reprojection and velocity
+        consistency with the accurate 2D pose.
+      </figcaption>
+    </figure>
+
+    <div class="method-subfigs">
+      <figure>
+        <img src="figures/overparameterized_loss.png" alt="Motion Representation Alignment illustration">
+        <figcaption>
+          <strong>Motion Representation Alignment.</strong> Each joint is projected to the closest point
+          along the ray through its 2D location and the camera center, providing 2D-consistent
+          pseudo-targets for the redundant motion channels.
+        </figcaption>
+      </figure>
+      <div style="display:flex; align-items:center;">
+        <p style="color:var(--text-muted); font-size:0.92rem;">
+          The over-parameterized motion representation includes joint rotations, velocities, and foot
+          contacts — channels that cannot be directly supervised in 2D. Ray projection produces
+          geometrically consistent pseudo-targets so the model learns coherent 3D motion without
+          any ground-truth 3D data.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ RESULTS — HumanML3D ══════════════════════ -->
+<section id="results-humanml">
+  <div class="container">
+    <h2>Text-to-3D Motion from 2D Poses — HumanML3D</h2>
+    <p class="results-intro">
+      To isolate the effect of 2D supervision from pose-estimation noise, we construct a 2D-only
+      version of HumanML3D by projecting MoCap sequences to random cameras and lifting them back
+      with a pretrained lifter. VideoMDM is trained using only these 2D projections and evaluated
+      against the 3D MoCap ground truth.
+    </p>
+    <span class="fid-callout">FID 0.88 &nbsp;·&nbsp; 3D-supervised MDM achieves 0.54</span>
+
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th class="prompt-th">Prompt</th>
+          <th>MDM on MVLift</th>
+          <th class="ours-th">VideoMDM (Ours)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="prompt-td">"a person waves with his right hand."</td>
+          <td>
+            <video data-src="videos/HumanML/mdm_on_mvlift/sample03.mp4" autoplay muted loop playsinline>
+            </video>
+          </td>
+          <td>
+            <video data-src="videos/HumanML/ours_mvlift/sample03.mp4" autoplay muted loop playsinline>
+            </video>
+          </td>
+        </tr>
+        <tr>
+          <td class="prompt-td">"the person walks backwards in a straight line."</td>
+          <td>
+            <video data-src="videos/HumanML/mdm_on_mvlift/sample06.mp4" autoplay muted loop playsinline>
+            </video>
+          </td>
+          <td>
+            <video data-src="videos/HumanML/ours_mvlift/sample06.mp4" autoplay muted loop playsinline>
+            </video>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<!-- ═══════════════ RESULTS — Fit3D ══════════════════════════ -->
+<section id="results-fit3d">
+  <div class="container">
+    <h2>Generation from Real Fitness Videos — Fit3D</h2>
+    <p class="results-intro">
+      VideoMDM is fine-tuned on Fit3D — real monocular fitness videos with no 3D supervision —
+      using WHAM as the noisy teacher lifter. The fitness exercises (deadlifts, mule kicks, push-ups)
+      are far outside the distribution of any MoCap-based lifter, directly testing the framework's
+      ability to learn motions the teacher has never seen.
+    </p>
+
+    <div class="placeholder">
+      Video comparison grid coming soon — samples and baselines to be confirmed.<br>
+      (Survey top-ranked candidates: sample07 deadlifts, sample16 diamond push-ups, sample06 barbell dead rows.)
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ SUPPLEMENTARY LINK ════════════════════════ -->
+<section id="supplementary-link">
+  <div class="container">
+    <p class="sup-cta">
+      For extended per-sample comparisons across all methods and datasets,
+      see the <a href="supplementary/index.html" target="_blank">full supplementary →</a>
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════ CITATION ══════════════════════════════════ -->
+<section id="citation">
+  <div class="container">
+    <h2>Citation</h2>
+    <pre>@article{mann2026videomdm,
+  title   = {VideoMDM: Towards 3D Human Motion Generation From 2D Supervision},
+  author  = {Mann, Amir and Harari, Gal and Keidar, Merav and Litany, Or},
+  journal = {arXiv preprint arXiv:XXXX.XXXXX},
+  year    = {2026}
+}</pre>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <p>© 2026 Amir Mann, Gal Harari, Merav Keidar, Or Litany.</p>
+    <p>Website structure built with <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a> (Anthropic).
+    Design inspired by <a href="https://nerfies.github.io" target="_blank" rel="noopener">Nerfies</a> and related academic project page conventions.</p>
+  </div>
+</footer>
+
+<script src="static/js/main.js"></script>
+</body>
+</html>
