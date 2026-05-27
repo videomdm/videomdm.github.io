@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VideoMDM — Supplementary</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f1117;
+    color: #e2e8f0;
+    min-height: 100vh;
+  }
+
+  header {
+    background: #1a1d2e;
+    border-bottom: 1px solid #2d3148;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  header h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #a78bfa;
+    white-space: nowrap;
+  }
+
+  .back-link {
+    margin-left: auto;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    text-decoration: none;
+    padding: 6px 12px;
+    border: 1px solid #2d3148;
+    border-radius: 6px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .back-link:hover { color: #a78bfa; border-color: #a78bfa; }
+
+  /* Experiment tabs */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: #0f1117;
+    padding: 12px 24px 0;
+    border-bottom: 1px solid #2d3148;
+  }
+
+  .tab {
+    padding: 10px 20px;
+    border-radius: 8px 8px 0 0;
+    border: 1px solid transparent;
+    border-bottom: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #94a3b8;
+    background: transparent;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .tab:hover { color: #e2e8f0; background: #1a1d2e; }
+
+  .tab.active {
+    color: #a78bfa;
+    background: #1a1d2e;
+    border-color: #2d3148;
+  }
+
+  /* Main content */
+  .content { padding: 20px 24px; }
+
+  .experiment { display: none; }
+  .experiment.active { display: block; }
+
+  /* Sample navigation */
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    background: #1a1d2e;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid #2d3148;
+  }
+
+  .nav-bar .label {
+    font-size: 0.8rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-btn {
+    background: #2d3148;
+    border: none;
+    color: #e2e8f0;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+
+  .nav-btn:hover { background: #3d4468; }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .sample-counter {
+    font-size: 0.85rem;
+    color: #64748b;
+    white-space: nowrap;
+  }
+
+  .jump-input {
+    width: 52px;
+    background: #2d3148;
+    border: 1px solid #3d4468;
+    border-radius: 6px;
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 4px 6px;
+    outline: none;
+    -moz-appearance: textfield;
+  }
+  .jump-input::-webkit-outer-spin-button,
+  .jump-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .jump-input:focus { border-color: #7c3aed; }
+
+  .sync-btn {
+    background: #2d3148;
+    border: 1px solid #3d4468;
+    color: #94a3b8;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .sync-btn:hover { background: #3d4468; color: #e2e8f0; }
+  .sync-btn.active { background: #6d28d9; border-color: #7c3aed; color: #fff; }
+
+  /* Video grid */
+  .video-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .video-cell {
+    background: #1a1d2e;
+    border: 1px solid #2d3148;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .video-cell.ours .method-label {
+    color: #c4b5fd;
+    background: #1e1545;
+    border-bottom-color: #4c1d95;
+  }
+
+  .method-label {
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #a78bfa;
+    background: #12152a;
+    border-bottom: 1px solid #2d3148;
+    letter-spacing: 0.03em;
+    text-align: center;
+  }
+
+  video {
+    width: 100%;
+    display: block;
+    background: #000;
+    aspect-ratio: 16/9;
+  }
+
+  /* Prompt display */
+  .prompt-box {
+    margin-bottom: 16px;
+    background: #12152a;
+    border: 1px solid #2d3148;
+    border-left: 3px solid #7c3aed;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 0.95rem;
+    color: #c4b5fd;
+    font-style: italic;
+    min-height: 2.4em;
+    line-height: 1.5;
+  }
+
+  /* Keyboard hint */
+  .hint {
+    margin-top: 16px;
+    font-size: 0.75rem;
+    color: #475569;
+    text-align: center;
+  }
+
+  .hint kbd {
+    background: #1a1d2e;
+    border: 1px solid #3d4468;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: inherit;
+    font-size: 0.75rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>VideoMDM &mdash; Supplementary</h1>
+  <a class="back-link" href="../index.html">&#8592; Main page</a>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchExp('fit3d', this)">Fit3D</div>
+  <div class="tab" onclick="switchExp('humanml', this)">HumanML</div>
+  <div class="tab" onclick="switchExp('nba', this)">NBA</div>
+</div>
+
+<div class="content">
+
+  <!-- ═══════════════ Fit3D ═══════════════ -->
+  <div class="experiment active" id="exp-fit3d">
+    <div class="nav-bar">
+      <span class="label">Sample</span>
+      <button class="nav-btn" id="fit3d-prev" onclick="navigate('fit3d', -1)">&#8592;</button>
+      <input type="number" class="jump-input" id="fit3d-jump" min="1" max="20" value="1"
+             onchange="setIndex('fit3d', this.value - 1)">
+      <span class="sample-counter" id="fit3d-counter">/ 20</span>
+      <button class="nav-btn" id="fit3d-next" onclick="navigate('fit3d', 1)">&#8594;</button>
+      <button class="sync-btn" id="fit3d-sync" onclick="toggleSync('fit3d')">&#9654; Sync play</button>
+    </div>
+    <div class="prompt-box" id="fit3d-prompt"></div>
+    <div class="video-grid" id="fit3d-grid" style="grid-template-columns: repeat(3, 1fr);">
+      <!-- generated by JS -->
+    </div>
+  </div>
+
+  <!-- ═══════════════ HumanML ═══════════════ -->
+  <div class="experiment" id="exp-humanml">
+    <div class="nav-bar">
+      <span class="label">Sample</span>
+      <button class="nav-btn" id="humanml-prev" onclick="navigate('humanml', -1)">&#8592;</button>
+      <input type="number" class="jump-input" id="humanml-jump" min="1" max="20" value="1"
+             onchange="setIndex('humanml', this.value - 1)">
+      <span class="sample-counter" id="humanml-counter">/ 20</span>
+      <button class="nav-btn" id="humanml-next" onclick="navigate('humanml', 1)">&#8594;</button>
+      <button class="sync-btn" id="humanml-sync" onclick="toggleSync('humanml')">&#9654; Sync play</button>
+    </div>
+    <div class="prompt-box" id="humanml-prompt"></div>
+    <div class="video-grid" id="humanml-grid" style="grid-template-columns: repeat(2, 1fr);">
+      <!-- generated by JS -->
+    </div>
+  </div>
+
+  <!-- ═══════════════ NBA ═══════════════ -->
+  <div class="experiment" id="exp-nba">
+    <div class="nav-bar">
+      <span class="label">Sample</span>
+      <button class="nav-btn" id="nba-prev" onclick="navigate('nba', -1)">&#8592;</button>
+      <input type="number" class="jump-input" id="nba-jump" min="1" max="10" value="1"
+             onchange="setIndex('nba', this.value - 1)">
+      <span class="sample-counter" id="nba-counter">/ 10</span>
+      <button class="nav-btn" id="nba-next" onclick="navigate('nba', 1)">&#8594;</button>
+      <button class="sync-btn" id="nba-sync" onclick="toggleSync('nba')">&#9654; Sync play</button>
+    </div>
+    <div class="video-grid" id="nba-grid" style="grid-template-columns: repeat(2, 1fr);">
+      <!-- generated by JS -->
+    </div>
+  </div>
+
+  <p class="hint">
+    Navigate samples with <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> arrow keys &nbsp;|&nbsp;
+    Click <b>Sync play</b> to play all videos together
+  </p>
+</div>
+
+<script>
+// ─── Prompts ───────────────────────────────────────────────────────────────
+const PROMPTS = {
+  fit3d: [
+    "a person is starting overhead extension thrusters.",
+    "a person is performing walk the box.",
+    "a person is starting diamond push-ups.",
+    "a person is performing push-ups.",
+    "a person is performing dumbbell hammer curls.",
+    "a person is starting dumbbell biceps curls.",
+    "a person is performing barbell dead rows.",
+    "a person is performing deadlifts.",
+    "a person is starting clean and presses.",
+    "a person is starting squats.",
+    "a person is starting man makers.",
+    "a person is starting barbell shrugs.",
+    "a person is performing man makers.",
+    "a person is starting dumbbell curl trifectas.",
+    "a person is starting band pull-aparts.",
+    "a person is starting burpees.",
+    "a person is performing diamond push-ups.",
+    "a person is performing burpees.",
+    "a person is performing barbell shrugs.",
+    "a person is starting mule kicks.",
+  ],
+  humanml: [
+    "a person is walking in place at a slow pace.",
+    "the person swings a golf club.",
+    "a man walks forward, then squats to pick something up with both hands, stands back up, and resumes walking.",
+    "a person waves with his right hand.",
+    "a man walks forward, then turns around and walks back before facing back and standing still.",
+    "a man using both hands to lift something off ground and places it back on ground in a slightly different position",
+    "the person walks backwards in a straight line",
+    "a man crouches down while quickly walking forward and then stands up straight.",
+    "a person walks forward casually with a swagger to their hips.",
+    "man jumps twice in place",
+    "a person boastfully meanders across a room in a confident manner.",
+    "a person walks up some stairs, turns around, and walks back down them.",
+    "person is walking normally in a circle",
+    "a person walks forward at a normal speed then turns right and continues to walk",
+    "the person is picking up something.",
+    "a person walks away diagonally to his right, picks something up, walks back, and then he again walks diagonally to his right and picks something up.",
+    "the man is doing starjumps",
+    "a person rubs their hands together.",
+    "a person waves a friendly hello.",
+    "a person turns to his right and paces back and forth",
+  ],
+};
+
+// ─── Experiment definitions ────────────────────────────────────────────────
+const EXPERIMENTS = {
+  fit3d: {
+    total: 20,
+    methods: [
+      { key: 'ours',                label: 'Ours',           ours: true  },
+      { key: 'ours_pnp',            label: 'Ours (PnP)',     ours: true  },
+      { key: 'wham_lift',           label: 'WHAM Lift',      ours: false },
+      { key: 'fit3d_mdm_on_wham',   label: 'MDM on WHAM',   ours: false },
+      { key: 'mvlift',              label: 'MVLift',          ours: false },
+      { key: 'fit3d_mdm_on_mvlift', label: 'MDM on MVLift',  ours: false },
+    ],
+    videoPath: (method, idx) => `../videos/Fit3D/${method}/sample${String(idx).padStart(2,'0')}.mp4`,
+  },
+  humanml: {
+    total: 20,
+    methods: [
+      { key: 'ours_mvlift',       label: 'Ours (MVLift)',       ours: true  },
+      { key: 'ours_mvlift_PNP',   label: 'Ours MVLift (PnP)',   ours: true  },
+      { key: 'mdm_on_motionbert', label: 'MDM on MotionBERT',   ours: false },
+      { key: 'mdm_on_mvlift',     label: 'MDM on MVLift',       ours: false },
+    ],
+    videoPath: (method, idx) => `../videos/HumanML/${method}/sample${String(idx).padStart(2,'0')}.mp4`,
+  },
+  nba: {
+    total: 10,
+    methods: [
+      { key: 'videomdm', label: 'VideoMDM', ours: true  },
+      { key: 'mas',      label: 'MAS',      ours: false },
+    ],
+    videoPath: (method, idx) => `../videos/NBA/${method}/result_${idx}.mp4`,
+  },
+};
+
+// ─── State ─────────────────────────────────────────────────────────────────
+const state = {
+  nba:     { idx: 0, syncOn: false },
+  fit3d:   { idx: 0, syncOn: false },
+  humanml: { idx: 0, syncOn: false },
+};
+
+let activeExp = 'fit3d';
+
+// ─── Build grids ───────────────────────────────────────────────────────────
+function buildGrids() {
+  for (const [expKey, exp] of Object.entries(EXPERIMENTS)) {
+    const grid = document.getElementById(`${expKey}-grid`);
+    for (const method of exp.methods) {
+      const cell = document.createElement('div');
+      cell.className = 'video-cell' + (method.ours ? ' ours' : '');
+      cell.innerHTML = `
+        <div class="method-label">${method.label}</div>
+        <video id="vid-${expKey}-${method.key}" controls loop preload="none">
+          <source src="${exp.videoPath(method.key, 0)}" type="video/mp4">
+        </video>`;
+      grid.appendChild(cell);
+    }
+  }
+}
+
+// ─── Update videos for current sample ─────────────────────────────────────
+function updateVideos(expKey) {
+  const exp = EXPERIMENTS[expKey];
+  const idx = state[expKey].idx;
+  for (const method of exp.methods) {
+    const vid = document.getElementById(`vid-${expKey}-${method.key}`);
+    const newSrc = exp.videoPath(method.key, idx);
+    if (vid.querySelector('source').src !== new URL(newSrc, location.href).href) {
+      const wasPlaying = !vid.paused;
+      vid.querySelector('source').setAttribute('src', newSrc);
+      vid.load();
+      if (wasPlaying) vid.play().catch(() => {});
+    }
+  }
+  document.getElementById(`${expKey}-jump`).value = idx + 1;
+  document.getElementById(`${expKey}-counter`).textContent = `/ ${exp.total}`;
+  document.getElementById(`${expKey}-prev`).disabled = idx === 0;
+  document.getElementById(`${expKey}-next`).disabled = idx === exp.total - 1;
+  const promptEl = document.getElementById(`${expKey}-prompt`);
+  if (promptEl && PROMPTS[expKey]) promptEl.textContent = PROMPTS[expKey][idx] ?? '';
+}
+
+// ─── Navigation ────────────────────────────────────────────────────────────
+function navigate(expKey, delta) {
+  const exp = EXPERIMENTS[expKey];
+  const s = state[expKey];
+  s.idx = Math.max(0, Math.min(exp.total - 1, s.idx + delta));
+  updateVideos(expKey);
+}
+
+function setIndex(expKey, idx) {
+  const exp = EXPERIMENTS[expKey];
+  state[expKey].idx = Math.max(0, Math.min(exp.total - 1, +idx));
+  updateVideos(expKey);
+}
+
+// ─── Sync play ─────────────────────────────────────────────────────────────
+function toggleSync(expKey) {
+  const s = state[expKey];
+  s.syncOn = !s.syncOn;
+  const btn = document.getElementById(`${expKey}-sync`);
+  btn.classList.toggle('active', s.syncOn);
+  btn.textContent = s.syncOn ? '⏸ Synced' : '▶ Sync play';
+
+  if (s.syncOn) {
+    const videos = getVideos(expKey);
+    const lead = videos[0];
+    lead.play().catch(() => {});
+    videos.slice(1).forEach(v => {
+      v.currentTime = lead.currentTime;
+      v.play().catch(() => {});
+    });
+    lead.addEventListener('timeupdate', () => syncFollowers(expKey), { signal: getSyncSignal(expKey) });
+    lead.addEventListener('pause', () => videos.slice(1).forEach(v => v.pause()), { signal: getSyncSignal(expKey) });
+    lead.addEventListener('play',  () => videos.slice(1).forEach(v => v.play().catch(()=>{})), { signal: getSyncSignal(expKey) });
+  } else {
+    stopSync(expKey);
+  }
+}
+
+const syncControllers = {};
+function getSyncSignal(expKey) {
+  if (syncControllers[expKey]) syncControllers[expKey].abort();
+  syncControllers[expKey] = new AbortController();
+  return syncControllers[expKey].signal;
+}
+function stopSync(expKey) {
+  if (syncControllers[expKey]) {
+    syncControllers[expKey].abort();
+    delete syncControllers[expKey];
+  }
+}
+function syncFollowers(expKey) {
+  const videos = getVideos(expKey);
+  const lead = videos[0];
+  videos.slice(1).forEach(v => {
+    if (Math.abs(v.currentTime - lead.currentTime) > 0.3)
+      v.currentTime = lead.currentTime;
+  });
+}
+function getVideos(expKey) {
+  return EXPERIMENTS[expKey].methods.map(m =>
+    document.getElementById(`vid-${expKey}-${m.key}`)
+  );
+}
+
+// ─── Tab switching ─────────────────────────────────────────────────────────
+function switchExp(expKey, tabEl) {
+  document.querySelectorAll('.experiment').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.getElementById(`exp-${expKey}`).classList.add('active');
+  tabEl.classList.add('active');
+  activeExp = expKey;
+}
+
+// ─── Keyboard navigation ───────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowLeft')  navigate(activeExp, -1);
+  if (e.key === 'ArrowRight') navigate(activeExp,  1);
+});
+
+// ─── Init ──────────────────────────────────────────────────────────────────
+buildGrids();
+updateVideos('fit3d');
+updateVideos('humanml');
+updateVideos('nba');
+</script>
+</body>
+</html>
