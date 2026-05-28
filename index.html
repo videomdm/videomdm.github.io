@@ -176,9 +176,12 @@
     <figure class="subfig">
       <img src="figures/overparameterized_loss.png" alt="Motion Representation Alignment illustration">
       <figcaption>
-        <strong>Motion Representation Alignment.</strong> Each joint is projected to the closest point
-        along the ray through its 2D location and the camera center, providing 2D-consistent
-        pseudo-targets for the redundant motion channels.
+        <strong>Motion Representation Alignment.</strong> The motion representation includes
+        <em>redundant channels</em> — joint rotations, velocities, and foot-contact labels —
+        that can be derived from joint positions but cannot be directly supervised from 2D
+        observations. Each predicted 3D joint is projected to the nearest point on the ray
+        through its observed 2D location, yielding a 2D-consistent 3D pseudo-target from
+        which these channels can be computed and used as supervision.
       </figcaption>
     </figure>
 
