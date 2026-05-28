@@ -176,12 +176,13 @@
     <figure class="subfig">
       <img src="figures/overparameterized_loss.png" alt="Motion Representation Alignment illustration">
       <figcaption>
-        <strong>Motion Representation Alignment.</strong> The motion representation includes
-        <em>redundant channels</em> — joint rotations, velocities, and foot-contact labels —
-        that can be derived from joint positions but cannot be directly supervised from 2D
-        observations. Each predicted 3D joint is projected to the nearest point on the ray
-        through its observed 2D location, yielding a 2D-consistent 3D pseudo-target from
-        which these channels can be computed and used as supervision.
+        <strong>Motion Representation Alignment.</strong> Motion generation models commonly
+        adopt an over-parameterized representation that includes joint rotations, velocities,
+        and foot-contact labels alongside joint positions. These redundant channels — derivable
+        from positions — cannot be directly supervised from 2D observations. Each predicted 3D
+        joint is projected to the nearest point on the ray through its observed 2D location,
+        yielding a 2D-consistent pseudo-target from which the redundant channels can be
+        computed and used as supervision.
       </figcaption>
     </figure>
 
