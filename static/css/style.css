@@ -191,7 +191,7 @@ a:hover { text-decoration: underline; }
   margin-top: 24px;
 }
 
-#method figure img {
+#method figure:not(.subfig) img {
   width: 100%;
   border-radius: var(--radius);
   border: 1px solid var(--border);
@@ -206,7 +206,6 @@ a:hover { text-decoration: underline; }
 
 .subfig {
   margin-top: 24px;
-  width: 100%;
 }
 
 .subfig img {
