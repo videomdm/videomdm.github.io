@@ -206,7 +206,15 @@ a:hover { text-decoration: underline; }
 
 .subfig {
   margin-top: 24px;
-  max-width: 55%;
+  width: 100%;
+}
+
+.subfig img {
+  display: block;
+  width: 65%;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
 }
 
 /* ── Results: comparison grids ────────────────────────────── */
@@ -316,7 +324,7 @@ footer {
 @media (max-width: 640px) {
   .hero-grid { grid-template-columns: 1fr; }
   .stat-cards { grid-template-columns: 1fr; }
-  .subfig { max-width: 100%; }
+  .subfig img { width: 100%; }
   .comparison-table { display: block; overflow-x: auto; }
   .comparison-table td.prompt-td { display: none; }
   #header h1 { font-size: 1.4rem; }
