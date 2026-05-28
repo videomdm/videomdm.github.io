@@ -65,6 +65,7 @@
 <!-- ═══════════════ HERO ══════════════════════════════════════ -->
 <section id="hero">
   <div class="container">
+    <p class="hero-note">Sample outputs — work in progress</p>
     <div class="hero-grid">
 
       <div class="hero-cell">
@@ -131,7 +132,7 @@
 
       <div class="stat-card">
         <div class="stat-number">2×</div>
-        <div class="stat-label">lower MPJPE than WHAM<br>on Fit3D (111 vs 228 mm)</div>
+        <div class="stat-label">lower MPJPE than WHAM<br>on Fit3D</div>
       </div>
 
       <div class="stat-card">
@@ -172,24 +173,14 @@
       </figcaption>
     </figure>
 
-    <div class="method-subfigs">
-      <figure>
-        <img src="figures/overparameterized_loss.png" alt="Motion Representation Alignment illustration">
-        <figcaption>
-          <strong>Motion Representation Alignment.</strong> Each joint is projected to the closest point
-          along the ray through its 2D location and the camera center, providing 2D-consistent
-          pseudo-targets for the redundant motion channels.
-        </figcaption>
-      </figure>
-      <div style="display:flex; align-items:center;">
-        <p style="color:var(--text-muted); font-size:0.92rem;">
-          The over-parameterized motion representation includes joint rotations, velocities, and foot
-          contacts — channels that cannot be directly supervised in 2D. Ray projection produces
-          geometrically consistent pseudo-targets so the model learns coherent 3D motion without
-          any ground-truth 3D data.
-        </p>
-      </div>
-    </div>
+    <figure class="subfig">
+      <img src="figures/overparameterized_loss.png" alt="Motion Representation Alignment illustration">
+      <figcaption>
+        <strong>Motion Representation Alignment.</strong> Each joint is projected to the closest point
+        along the ray through its 2D location and the camera center, providing 2D-consistent
+        pseudo-targets for the redundant motion channels.
+      </figcaption>
+    </figure>
 
   </div>
 </section>

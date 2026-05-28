@@ -110,6 +110,14 @@ a:hover { text-decoration: underline; }
 /* ── Hero ─────────────────────────────────────────────────── */
 #hero { padding: 40px 0; background: var(--bg-alt); }
 
+.hero-note {
+  text-align: center;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
 .hero-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -196,11 +204,9 @@ a:hover { text-decoration: underline; }
   text-align: center;
 }
 
-.method-subfigs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+.subfig {
   margin-top: 24px;
+  max-width: 55%;
 }
 
 /* ── Results: comparison grids ────────────────────────────── */
@@ -310,7 +316,7 @@ footer {
 @media (max-width: 640px) {
   .hero-grid { grid-template-columns: 1fr; }
   .stat-cards { grid-template-columns: 1fr; }
-  .method-subfigs { grid-template-columns: 1fr; }
+  .subfig { max-width: 100%; }
   .comparison-table { display: block; overflow-x: auto; }
   .comparison-table td.prompt-td { display: none; }
   #header h1 { font-size: 1.4rem; }

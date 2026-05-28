@@ -402,7 +402,7 @@ function buildGrids() {
       cell.className = 'video-cell' + (method.ours ? ' ours' : '');
       cell.innerHTML = `
         <div class="method-label">${method.label}</div>
-        <video id="vid-${expKey}-${method.key}" controls loop preload="none">
+        <video id="vid-${expKey}-${method.key}" controls loop preload="metadata">
           <source src="${exp.videoPath(method.key, 0)}" type="video/mp4">
         </video>`;
       grid.appendChild(cell);
@@ -517,6 +517,7 @@ buildGrids();
 updateVideos('fit3d');
 updateVideos('humanml');
 updateVideos('nba');
+toggleSync('fit3d');
 </script>
 </body>
 </html>
