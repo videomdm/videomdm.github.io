@@ -35,31 +35,14 @@
     background: var(--bg-alt);
     border-bottom: 1px solid var(--border);
     padding: 14px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
   }
 
   header h1 {
     font-size: 1.1rem;
     font-weight: 700;
     color: var(--accent);
-    white-space: nowrap;
+    margin-bottom: 8px;
   }
-
-  .back-link {
-    margin-left: auto;
-    font-size: 0.85rem;
-    color: var(--muted);
-    text-decoration: none;
-    padding: 5px 12px;
-    border: 1.5px solid var(--border);
-    border-radius: 6px;
-    transition: all 0.15s;
-    white-space: nowrap;
-    font-weight: 500;
-  }
-  .back-link:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-lt); }
 
   /* Tabs */
   .tabs {
@@ -246,6 +229,36 @@
     font-size: 0.75rem;
   }
 
+  /* Nav button row */
+  .btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text);
+    background: var(--bg);
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn:hover { border-color: var(--accent); background: var(--accent-lt); color: var(--accent); text-decoration: none; }
+  .btn.current { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  .btn.current:hover { background: var(--accent-lt); }
+  .btn.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+  .btn .tag { font-size: 0.7rem; opacity: 0.7; font-weight: 400; }
+
   /* Responsive */
   @media (max-width: 900px) {
     #fit3d-grid  { grid-template-columns: repeat(2, 1fr) !important; }
@@ -260,8 +273,16 @@
 <body>
 
 <header>
-  <h1>VideoMDM &mdash; Supplementary</h1>
-  <a class="back-link" href="../index.html">&#8592; Main page</a>
+  <div>
+    <h1>VideoMDM &mdash; Supplementary</h1>
+    <div class="btn-row">
+      <a class="btn" href="../index.html">Project Page</a>
+      <a class="btn" href="../VideoMDM.pdf" target="_blank">📄 Paper</a>
+      <a class="btn disabled" aria-disabled="true" tabindex="-1">arXiv <span class="tag">(coming soon)</span></a>
+      <a class="btn disabled" aria-disabled="true" tabindex="-1">💻 Code <span class="tag">(coming soon)</span></a>
+      <a class="btn current" href="./" aria-current="page">🎬 Supplementary</a>
+    </div>
+  </div>
 </header>
 
 <div class="tabs">
