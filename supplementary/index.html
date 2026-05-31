@@ -5,105 +5,121 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VideoMDM — Supplementary</title>
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  :root {
+    --bg:         #ffffff;
+    --bg-alt:     #f7f8fc;
+    --text:       #111827;
+    --muted:      #6b7280;
+    --accent:     #6d28d9;
+    --accent-lt:  #ede9fe;
+    --border:     #e5e7eb;
+    --radius:     10px;
+  }
+
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #0f1117;
-    color: #e2e8f0;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
     min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
   }
 
   header {
-    background: #1a1d2e;
-    border-bottom: 1px solid #2d3148;
-    padding: 16px 24px;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
     display: flex;
     align-items: center;
     gap: 16px;
   }
 
   header h1 {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    color: #a78bfa;
+    color: var(--accent);
     white-space: nowrap;
   }
 
   .back-link {
     margin-left: auto;
     font-size: 0.85rem;
-    color: #94a3b8;
+    color: var(--muted);
     text-decoration: none;
-    padding: 6px 12px;
-    border: 1px solid #2d3148;
+    padding: 5px 12px;
+    border: 1.5px solid var(--border);
     border-radius: 6px;
     transition: all 0.15s;
     white-space: nowrap;
+    font-weight: 500;
   }
-  .back-link:hover { color: #a78bfa; border-color: #a78bfa; }
+  .back-link:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-lt); }
 
-  /* Experiment tabs */
+  /* Tabs */
   .tabs {
     display: flex;
     gap: 4px;
-    background: #0f1117;
+    background: var(--bg);
     padding: 12px 24px 0;
-    border-bottom: 1px solid #2d3148;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
   }
 
   .tab {
-    padding: 10px 20px;
+    padding: 9px 20px;
     border-radius: 8px 8px 0 0;
     border: 1px solid transparent;
     border-bottom: none;
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: 500;
-    color: #94a3b8;
+    color: var(--muted);
     background: transparent;
     transition: all 0.15s;
     user-select: none;
+    white-space: nowrap;
   }
 
-  .tab:hover { color: #e2e8f0; background: #1a1d2e; }
+  .tab:hover { color: var(--text); background: var(--bg-alt); }
+  .tab.active { color: var(--accent); background: var(--bg-alt); border-color: var(--border); font-weight: 600; }
 
-  .tab.active {
-    color: #a78bfa;
-    background: #1a1d2e;
-    border-color: #2d3148;
-  }
-
-  /* Main content */
+  /* Content */
   .content { padding: 20px 24px; }
 
   .experiment { display: none; }
   .experiment.active { display: block; }
 
-  /* Sample navigation */
+  /* Nav bar */
   .nav-bar {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 20px;
-    background: #1a1d2e;
-    padding: 12px 16px;
-    border-radius: 10px;
-    border: 1px solid #2d3148;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    background: var(--bg-alt);
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
   }
 
   .nav-bar .label {
-    font-size: 0.8rem;
-    color: #64748b;
+    font-size: 0.75rem;
+    color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-weight: 600;
   }
 
   .nav-btn {
-    background: #2d3148;
-    border: none;
-    color: #e2e8f0;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    color: var(--text);
     width: 32px;
     height: 32px;
     border-radius: 6px;
@@ -112,82 +128,84 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.15s;
+    transition: all 0.15s;
     flex-shrink: 0;
   }
-
-  .nav-btn:hover { background: #3d4468; }
+  .nav-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-lt); }
   .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
   .sample-counter {
     font-size: 0.85rem;
-    color: #64748b;
+    color: var(--muted);
     white-space: nowrap;
   }
 
   .jump-input {
     width: 52px;
-    background: #2d3148;
-    border: 1px solid #3d4468;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
     border-radius: 6px;
-    color: #e2e8f0;
+    color: var(--text);
     font-size: 0.95rem;
     font-weight: 600;
     text-align: center;
     padding: 4px 6px;
     outline: none;
+    font-family: inherit;
     -moz-appearance: textfield;
   }
   .jump-input::-webkit-outer-spin-button,
   .jump-input::-webkit-inner-spin-button { -webkit-appearance: none; }
-  .jump-input:focus { border-color: #7c3aed; }
+  .jump-input:focus { border-color: var(--accent); }
 
   .sync-btn {
-    background: #2d3148;
-    border: 1px solid #3d4468;
-    color: #94a3b8;
-    padding: 6px 12px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    color: var(--muted);
+    padding: 5px 12px;
     border-radius: 6px;
     cursor: pointer;
     font-size: 0.8rem;
+    font-family: inherit;
+    font-weight: 500;
     transition: all 0.15s;
     white-space: nowrap;
     flex-shrink: 0;
   }
-
-  .sync-btn:hover { background: #3d4468; color: #e2e8f0; }
-  .sync-btn.active { background: #6d28d9; border-color: #7c3aed; color: #fff; }
+  .sync-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-lt); }
+  .sync-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
   /* Video grid */
-  .video-grid {
-    display: grid;
-    gap: 16px;
-  }
+  .video-grid { display: grid; gap: 12px; }
 
   .video-cell {
-    background: #1a1d2e;
-    border: 1px solid #2d3148;
-    border-radius: 10px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
     overflow: hidden;
     display: flex;
     flex-direction: column;
   }
 
+  .video-cell.ours {
+    border-color: #c4b5fd;
+  }
   .video-cell.ours .method-label {
-    color: #c4b5fd;
-    background: #1e1545;
-    border-bottom-color: #4c1d95;
+    background: var(--accent-lt);
+    color: var(--accent);
+    border-bottom-color: #c4b5fd;
   }
 
   .method-label {
-    padding: 8px 12px;
-    font-size: 0.78rem;
+    padding: 7px 12px;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: #a78bfa;
-    background: #12152a;
-    border-bottom: 1px solid #2d3148;
+    color: var(--muted);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
     letter-spacing: 0.03em;
     text-align: center;
+    text-transform: uppercase;
   }
 
   video {
@@ -197,36 +215,45 @@
     aspect-ratio: 16/9;
   }
 
-  /* Prompt display */
+  /* Prompt */
   .prompt-box {
-    margin-bottom: 16px;
-    background: #12152a;
-    border: 1px solid #2d3148;
-    border-left: 3px solid #7c3aed;
+    margin-bottom: 14px;
+    background: var(--accent-lt);
+    border: 1px solid #c4b5fd;
+    border-left: 3px solid var(--accent);
     border-radius: 8px;
     padding: 10px 16px;
     font-size: 0.95rem;
-    color: #c4b5fd;
+    color: var(--accent);
     font-style: italic;
     min-height: 2.4em;
     line-height: 1.5;
   }
 
-  /* Keyboard hint */
+  /* Hint */
   .hint {
     margin-top: 16px;
     font-size: 0.75rem;
-    color: #475569;
+    color: var(--muted);
     text-align: center;
   }
-
   .hint kbd {
-    background: #1a1d2e;
-    border: 1px solid #3d4468;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
     border-radius: 4px;
     padding: 1px 6px;
     font-family: inherit;
     font-size: 0.75rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    #fit3d-grid  { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+  @media (max-width: 580px) {
+    .content { padding: 14px 12px; }
+    #fit3d-grid, #humanml-grid, #nba-grid { grid-template-columns: 1fr !important; }
+    .tab { padding: 8px 12px; font-size: 0.82rem; }
   }
 </style>
 </head>
