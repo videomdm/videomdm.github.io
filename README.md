@@ -54,7 +54,6 @@ Academic project page for _VideoMDM: Towards 3D Human Motion Generation From 2D 
 | HumanML results | Comparison table: MDM on MVLift vs VideoMDM — samples 03, 06 |
 | Fit3D results | Comparison table: WHAM Lift · MDM on WHAM · VideoMDM — samples 07, 16, 06 |
 | Supplementary link | CTA → `supplementary/index.html` |
-| BibTeX | Plain `@article` block, no journal field until arXiv is up |
 | Footer | © line + last-updated date |
 
 ---
@@ -71,10 +70,6 @@ In `index.html`, find the arXiv button and:
 
 ### When the code repo is released
 Same steps as above for the Code button, pointing to the GitHub repo URL.
-
-### When the paper is accepted
-Add a venue badge below the title in `index.html` (e.g. `<span class="venue-badge">NeurIPS 2026</span>`).  
-**Do not add this before official acceptance notification.**
 
 ### Updating author personal page links
 In `index.html`, find the `<p class="authors">` block. Replace `href="#"` with the correct URL for each author.
