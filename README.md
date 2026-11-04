@@ -71,9 +71,6 @@ In `index.html`, find the arXiv button and:
 ### When the code repo is released
 Same steps as above for the Code button, pointing to the GitHub repo URL.
 
-### Updating author personal page links
-In `index.html`, find the `<p class="authors">` block. Replace `href="#"` with the correct URL for each author.
-
 ### Updating the paper PDF
 Replace `VideoMDM.pdf` in the repo root. No HTML changes needed.
 
