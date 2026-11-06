@@ -3,7 +3,7 @@
 Live at: **https://videomdm.github.io**
 
 Academic project page for _VideoMDM: Towards 3D Human Motion Generation From 2D Supervision_  
-(Amir Mann, Gal Harari, Merav Keidar, Or Litany — Technion / NVIDIA)
+(Amir Mann, Gal Michael Harari, Merav Keidar, Or Litany — Technion / NVIDIA)
 
 ---
 
